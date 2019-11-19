@@ -19,6 +19,7 @@ def train_naive_bayes(dataset_train, alpha):
 
 	prob_dataset_0 = (dataset_class_0.sum(axis=0, skipna=True) + alpha) / (
 				dataset_class_0.values.sum() + len(dataset_class_0.columns))
+
 	prob_dataset_1 = (dataset_class_1.sum(axis=0, skipna=True) + alpha) / (
 				dataset_class_1.values.sum() + len(dataset_class_1.columns))
 
@@ -40,7 +41,7 @@ def predict_naive_bayes(prior_class_0, prior_class_1, prob_dataset_0, prob_datas
 				row_prediction_1 = row_prediction_1 * prob_dataset_1.iloc[i]
 			i = i + 1
 
-		if row_prediction_0 > row_prediction_1:
+		if row_prediction_0 >= row_prediction_1:
 			predictions.append(0)
 		else:
 			predictions.append(1)
@@ -72,10 +73,10 @@ def accuracy_naive_bayes(dataset_predictions, dataset_act_class):
 subjects = pd.read_csv('emails/dbworld_subjects_stemmed.csv')
 subjects = subjects.drop(columns=['id'])
 
-subjects_train = subjects.sample(frac=0.8, random_state=200)
+subjects_train = subjects.sample(frac=0.8, random_state=50)
 subjects_test = subjects.drop(subjects_train.index)
 
-prior_subjects_class_0, prior_subjects_class_1, prob_subjects_0, prob_subjects_1 = train_naive_bayes(subjects_train, 0.001)
+prior_subjects_class_0, prior_subjects_class_1, prob_subjects_0, prob_subjects_1 = train_naive_bayes(subjects_train, 1)
 
 subjects_predictions = predict_naive_bayes(prior_subjects_class_0, prior_subjects_class_1, prob_subjects_0, prob_subjects_1, subjects_test)
 
@@ -91,13 +92,12 @@ print subjects_f_mes
 bodies = pd.read_csv('emails/dbworld_bodies_stemmed.csv')
 bodies = bodies.drop(columns=['id'])
 
-bodies_train = bodies.sample(frac=0.8, random_state=200)
+bodies_train = bodies.sample(frac=0.8, random_state=50)
 bodies_test = bodies.drop(bodies_train.index)
 
-prior_bodies_class_0, prior_bodies_class_1, prob_bodies_0, prob_bodies_1 = train_naive_bayes(bodies_train, 0.001)
+prior_bodies_class_0, prior_bodies_class_1, prob_bodies_0, prob_bodies_1 = train_naive_bayes(bodies_train, 1)
 
 bodies_predictions = predict_naive_bayes(prior_bodies_class_0, prior_bodies_class_1, prob_bodies_0, prob_bodies_1, bodies_test)
-
 bodies_act_class = []
 
 for item in bodies_test.iloc[:, -1]:

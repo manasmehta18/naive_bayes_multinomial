@@ -27,7 +27,7 @@ def accuracy_naive_bayes(dataset_predictions, dataset_act_class):
 subjects = pd.read_csv('emails/dbworld_subjects_stemmed.csv')
 subjects = subjects.drop(columns=['id'])
 
-subjects_train = subjects.sample(frac=0.8, random_state=200)
+subjects_train = subjects.sample(frac=0.8, random_state=50)
 subjects_test = subjects.drop(subjects_train.index)
 
 X_subjects_train = subjects_train.iloc[:, :-1].values
@@ -48,7 +48,7 @@ print subjects_f_mes
 bodies = pd.read_csv('emails/dbworld_bodies_stemmed.csv')
 bodies = bodies.drop(columns=['id'])
 
-bodies_train = bodies.sample(frac=0.8, random_state=200)
+bodies_train = bodies.sample(frac=0.8, random_state=50)
 bodies_test = bodies.drop(bodies_train.index)
 
 X_bodies_train = bodies_train.iloc[:, :-1].values
